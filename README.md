@@ -1,4 +1,4 @@
-# PWA Demos
+# Service Worker Demos
 
 Demonstrations for Service Worker usage, including [Service Worker][service-worker], [Fetch API][fetch-api] and more.
 
