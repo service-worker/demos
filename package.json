@@ -1,0 +1,30 @@
+{
+  "name": "pwa-demos",
+  "version": "1.0.0",
+  "description": "Demonstrations for PWA features, including [Service Worker][service-worker], [Fetch API][fetch-api], and [Web App Manifest][webapp-manifest].",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harttle/pwa-demos.git"
+  },
+  "author": "harttle <yangjvn@126.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harttle/pwa-demos/issues"
+  },
+  "homepage": "https://github.com/harttle/pwa-demos#readme",
+  "dependencies": {
+    "http-server": "^0.9.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}

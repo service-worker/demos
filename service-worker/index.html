@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simple Service Worker</title>
+</head>
+<body>
+  <h1>Respond The <code>img</code> Fetch</h1>
+  <dl>
+    <dt>Reload (Cmd+R)</dt>
+    <dd>The service worker greyscales the img, give it a refresh!</dd>
+    <dt>Hard Reload (Cmd+Shift+R)</dt>
+    <dd>Disables the service worker, and shows the original img</dd>
+  </dl>
+  <img src="//unsplash.it/200/300" alt="broken link">
+
+  <script src="../utils/logger.js"></script>
+  <script>
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => logger.log('sw registered to', reg.scope))
+      .catch(x => logger.error('register failed', x.message))
+  </script>
+</body>
+</html>
