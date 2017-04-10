@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SW Update</title>
+</head>
+<body>
+  <h1>Service Worker Update</h1>
+
+  <p>
+    The sw.js will be different in every request, with max-age set to 10s.
+  </p>
+  <p>
+    Current Version:  <span id="version">NaN</span>
+    <br>
+    Updatefound: <span id='updatefound'>No</span>
+  </p>
+
+  <dl>
+    <dt>Just Reload (Cmd+R)</dt>
+    <dd>The new service worker will be activated if updatefound.</dd>
+
+    <dt><button id="update">Update</button> Manually</dt>
+    <dd>The regisration.update() pings the server for an updated version of this script without consulting caches. Chrome fails this API currently.</dd>
+  </dl>
+
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+
+(function(){
+    if(location.port !== "8081") {
+      var alert = $('<div>').css('background', 'red').css('color', 'white').css('padding', '15px 30px');
+      $('<p>').text('Please run this demo in Node.js by node ./server.js').appendTo(alert);
+      $('<p>').text('Source:').appendTo(alert);
+
+      var url = 'https://github.com/service-worker/demos/tree/master/simple-fetch';
+      var a = $('<a>').attr('href', url).text(url);
+
+      $('<p>').append(a).appendTo(alert);
+      $('body').prepend(alert)
+      return
+    }
+
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => {
+        console.log('sw registered to', reg.scope)
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          $('#updatefound').text('Yes')
+          newWorker.addEventListener('statechange', function(event){
+            $('#' + newWorker.state).text('Yes')
+            if(newWorker.state === 'activated') {
+              fetchVersion()
+            }
+          })
+        });
+      })
+      .catch(x => console.error('register failed', x.message))
+
+    $('#update').click(function(){
+      navigator.serviceWorker.getRegistration()
+        .then(reg => reg.update())
+        .catch(x => console.error('update failed', x))
+    })
+
+    fetchVersion()
+
+    function fetchVersion(){
+      $.get('/version')
+        .done(function(version){
+          $('#version').text(version)
+        })
+        .fail(function(){
+          $('#version').text('NaN')
+        })
+    }
+})()
+  </script>
+
+  <footer>Proudly hosted by <a href="/">Github</a>,
+    view source <a href="https://github.com/service-worker/demos/tree/master/simple-fetch">here</a>.</footer>
+</body>
+</html>
