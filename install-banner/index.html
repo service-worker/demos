@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="./manifest.json">
+
+  <title>Install Banner Should be Triggered</title>
+</head>
+<body>
+  <h1>Install Banner Should be Triggered</h1>
+
+  <p>This page respects the criteria to show Web App install banner in Chrome for Android:</p>
+  <ul>
+    <li>A Service Worker registered.</li>
+    <li>A Web App manifest file with <code>short_name</code> and <code>144x144</code> png icon defined.</li>
+    <li>The icon is image/png.</li>
+    <li>The site is served over HTTPS.</li>
+  </ul>
+
+  <blockquote>Chrome applies user engagement detection to prompt install banner, this can be disabled in chrome://flags to always show this banner.</blockquote>
+  <blockquote>To show Google Play install banner, set <code>related_applications</code></blockquote>
+
+  <script>
+    navigator.serviceWorker.register('./sw.js')
+      .catch(function(x){
+        alert('register failed');
+        throw x;
+      })
+  </script>
+
+  <footer>Proudly hosted by <a href="/">Github</a>,
+    view source <a href="https://github.com/service-worker/demos/tree/master/install-banner">here</a>.</footer>
+</body>
+</html>
