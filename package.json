@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/harttle/pwa-demos#readme",
   "dependencies": {
+    "express": "^4.15.2",
     "http-server": "^0.9.0"
   },
   "devDependencies": {
