@@ -6,6 +6,7 @@ Demonstrations for Service Worker usage, including [Service Worker][service-work
 * Service Worker Update: `node sw-update/server.js`
 * Fetch with Credentials: `node fetch-with-credentials/server.js`
 * Install Banner: <https://service-worker.github.io/demos/install-banner/>
+* Manifest: <https://service-worker.github.io/demos/manifest/>
 
 [fetch-api]: https://fetch.spec.whatwg.org/
 [service-worker]: https://developer.mozilla.org/zh-CN/docs/Web/API/Service_Worker_API
