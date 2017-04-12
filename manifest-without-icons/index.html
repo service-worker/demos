@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="./manifest.json">
+
+  <title>Mainifest without Icons</title>
+</head>
+<body>
+  <h1>Mainifest without Icons</h1>
+
+  <p>There's a fine Service Worker and <code>manifest.json</code> (without icons set) associated with this page.
+  Install banner won't show up according to Android for Chrome criterias.
+  </p>
+
+  <script>
+    navigator.serviceWorker.register('./sw.js')
+      .catch(function(x){
+        alert('register failed');
+        throw x;
+      })
+  </script>
+
+  <footer>Proudly hosted by <a href="//github.com">Github</a>,
+    authored by <a href="//github.com/harttle">Harttle</a>.
+    view source <a href="https://github.com/service-worker/demos/tree/master/manifest-without-icons">here</a>.</footer>
+</body>
+</html>
