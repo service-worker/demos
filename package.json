@@ -1,9 +1,10 @@
 {
-  "name": "pwa-demos",
+  "name": "service-worker-demo",
   "version": "1.0.0",
   "description": "Demonstrations for PWA features, including [Service Worker][service-worker], [Fetch API][fetch-api], and [Web App Manifest][webapp-manifest].",
   "main": "index.js",
   "scripts": {
+    "start": "http-server -p 8081 -o",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
