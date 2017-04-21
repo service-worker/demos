@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CORS Fetch Test</title>
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+  .link{
+    overflow: auto;
+    white-space: nowrap;
+  }
+  footer{
+    margin-top: 30px;
+  }
+  section label:first-child{
+    margin-right: 10px;
+  }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>CORS Fetch Demo</h1>
+
+    <p class="alert alert-danger refresh-msg hidden"></p>
+
+    <section>
+      <label>Target:</label>
+      <label class="radio-inline">
+        <input type="radio" name="url" value="http://placeholder.harttle.org/json/author.js"> Cross Origin
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="url" value="./data.js" checked> Same Origin
+      </label>
+      <p class="alert alert-info">Choose a cross domain-url or same-domain url.</p>
+    </section>
+
+    <section>
+      <label>Mode:</label>
+      <label class="radio-inline">
+        <input type="radio" name="mode" value="?mode=cors"> cors
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="mode" value="?mode=no-cors"> no-cors
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="mode" value="?mode=same-origin"> same-origin
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="mode" value="?mode=" checked> Default
+      </label>
+      <p class="alert alert-info">The mode option passed to Fetch API.</p>
+    </section>
+
+    <section>
+      <label>Cache:</label>
+      <label class="radio-inline">
+        <input type="radio" name="cache" value="" checked> Respond Directly
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="cache" value="&clone=true"> Clone
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="cache" value="&save=true"> Clone &amp; Save
+      </label>
+      <p class="alert alert-info">Use "no-cors" mode to fetch cross-domain resource.</p>
+    </section>
+
+    <section>
+      <label>Read Response:</label>
+      <label class="radio-inline">
+        <input type="radio" name="read" value="" checked> No
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="read" value="&read=true"> Read &amp; Modify
+      </label>
+      <p class="alert alert-info">Only</p>
+    </section>
+
+    <p style="overflow:auto">URL to Fetch: <br/>
+      <a target="_blank" id="url"></a>
+    </p>
+
+    <p>Fetch Result (updated at <span id="timestamp">NEVER</span>):</p>
+
+    <pre><code id="result">Click following buttons to fetch data.</code></pre>
+
+    <div>
+      <button class="btn btn-primary">Fetch</button>
+    </div>
+
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => {
+          console.log('sw register success')
+          if (reg.active && reg.active.state === 'activated') {
+            console.log('sw activated currently')
+          }
+          else {
+            var msg = 'Service Worker not activated yet, give it a refresh!'
+            console.log(msg)
+            $('.refresh-msg').text(msg).removeClass('hidden')
+          }
+        })
+        .catch(x => alert('Service Worker register failed', x.message))
+
+      $('input').click(updateUrl)
+      updateUrl()
+
+      function updateUrl(){
+        var url = getUrl()
+        $('#url').text(url).attr('href', url);
+      }
+
+      function getUrl () {
+          return $('input[name=url]:checked').val() +
+          $('input[name=mode]:checked').val() +
+          $('input[name=cache]:checked').val() +
+          $('input[name=read]:checked').val();
+      }
+
+      $('button').click(function() {
+        var url = getUrl();
+        $('#result').text('pending...');
+        $('#timestamp').text(new Date().toISOString())
+
+        $.ajax({url: url, dataType: 'jsonp', jsonpCallback: 'cb'})
+          .then(function(data) {
+            $('#result').text(JSON.stringify(data, null, 4))
+          })
+          .catch(function(data) {
+            $('#result').text('Error occurred, checkout the Console!')
+          })
+      })
+    </script>
+
+    <footer>
+      Proudly hosted by <a href="//github.com">Github</a>, authored by <a href="//github.com/harttle">Harttle</a>. View source <a href="https://github.com/service-worker/demos/tree/master/cors-fetch">here</a>.
+    </footer>
+  </div>
+</body>
+
+</html>

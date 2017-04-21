@@ -9,7 +9,7 @@
   <h1>Service Worker Update</h1>
 
   <p>
-    The sw.js will be different in every request, with max-age set to 10s.
+    The sw.js will be different in every request, with max-age set to 5s.
   </p>
   <p>
     Current Version:  <span id="version">NaN</span>
@@ -29,19 +29,6 @@
   <script>
 
 (function(){
-    if(location.port !== "8081") {
-      var alert = $('<div>').css('background', 'red').css('color', 'white').css('padding', '15px 30px');
-      $('<p>').text('Please run this demo in Node.js by node ./server.js').appendTo(alert);
-      $('<p>').text('Source:').appendTo(alert);
-
-      var url = 'https://github.com/service-worker/demos/tree/master/simple-fetch';
-      var a = $('<a>').attr('href', url).text(url);
-
-      $('<p>').append(a).appendTo(alert);
-      $('body').prepend(alert)
-      return
-    }
-
     navigator.serviceWorker.register('./sw.js')
       .then(reg => {
         console.log('sw registered to', reg.scope)

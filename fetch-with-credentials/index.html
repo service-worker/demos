@@ -4,52 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Fetch with Credentials</title>
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
   <style>
-pre{
-  background: #333;
-  overflow: auto;
-  border-radius: 5px;
-  padding: 10px 15px;
-  color: white;
-}
-button{
-  border: 1px solid lightgray;
-  border-radius: 2px;
-}
-.btn-group{
-  margin-bottom: 25px;
-}
-.btn-group .note{
-  background-color: #e5ffe5;
-  padding: 10px 15px;
-  border-radius: 5px;
+footer{
+  margin-top: 30px;
 }
   </style>
 </head>
-<body>
+<body class="container">
   <h1>Fetch with Credentials</h1>
 
+  <p> 
+    JavaScripts in this page will set <code>document.cookie</code> to
+    <span id="cookie">...</span>, which will be reflected by the server 
+    and all <strong>request headers</strong> are printed as following:
+  </p>
+
+  <pre><code id="headers">Click following buttons to fetch...</code></pre>
+
   <section>
-    <p>Cookie: <span id="cookie">Reading...</span></p>
+    <h3>ServiceWorkerGlobalScope.fetch()</h3>
+    <p>
+      <code>ServiceWorkerGlobalScope.fetch()</code>
+      attach cookies by default.
+    </p>
+    <button class="btn-primary btn btn-sm" id="sw-fetch">Fetch</button>
   </section>
 
   <section>
-    <p>HTTP headers:</p>
-    <pre><code id="headers">Click following buttons to fetch...</code></pre>
+    <h3>window.fetch()</h3>
+    <p><code>window.fetch(url, options)</code>
+      will not attach cookies by default.
+      Setting the <code>credentials</code> options will do this trick.
+    </p>
+    <button id="win-fetch" class="btn btn-primary btn-sm">Fetch</button>
+    <button id="win-fetch-with-credentials" class="btn btn-primary btn-sm">Fetch with Credentials</button>
+  </section>
 
-    <div class="btn-group">
-      <button id="sw-fetch">Fetch in Service Worker</button>
-      <p class="note"> Trigger <code>ServiceWorkerGlobalScope.fetch()</code> </p>
-    </div>
-    <div class="btn-group">
-      <button id="win-fetch">Fetch in Window</button>
-      <button id="win-fetch-with-credentials">Fetch with credentials</button>
-      <p class="note"> Trigger <code>window.fetch()</code> </p>
-    </div>
-    <div class="btn-group">
-      <button id="ajax-fetch">Ajax Fetch</button>
-      <p class="note"> Trigger <code>XMLHttpRequest.send()</code> </p>
-    </div>
+  <section>
+    <h3>AJAX</h3>
+    <p> <code>XMLHttpRequest.send()</code> will attach cookies by default, 
+      withCredentials is needed only in CORS requests.
+    </p>
+    <button id="ajax-fetch" class="btn btn-primary btn-sm">Send</button>
   </section>
 
   <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
@@ -75,7 +72,8 @@ button{
         throw e
       })
 
-    document.cookie = "author=harttle"
+    deleteAllCookies()
+    document.cookie = "author=harttle;path=/"
     $('#cookie').text(document.cookie)
 
     $('#sw-fetch').click(function(){
@@ -104,6 +102,15 @@ button{
         .done(x => (window.x =x, $('#headers').text(x)))
         .fail(x => $('#headers').text('fetch error'))
     })
+    function deleteAllCookies() {
+      var cookies = document.cookie.split(";");
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i];
+        var eqPos = cookie.indexOf("=");
+        var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
+    }
 
 })()
   </script>
