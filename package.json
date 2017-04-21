@@ -1,7 +1,7 @@
 {
   "name": "service-worker-demo",
   "version": "1.0.0",
-  "description": "Demonstrations for PWA features, including [Service Worker][service-worker], [Fetch API][fetch-api], and [Web App Manifest][webapp-manifest].",
+  "description": "Demonstrations for Service Worker related features, including [Service Worker][service-worker], [Fetch API][fetch-api], and [Web App Manifest][webapp-manifest].",
   "main": "index.js",
   "scripts": {
     "start": "node ./server.js",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harttle/pwa-demos.git"
+    "url": "git+https://github.com/service-worker/demos.git"
   },
   "author": "harttle <yangjvn@126.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/harttle/pwa-demos/issues"
+    "url": "https://github.com/service-worker/demos/issues"
   },
-  "homepage": "https://github.com/harttle/pwa-demos#readme",
+  "homepage": "https://github.com/service-worker/demos#readme",
   "dependencies": {
     "express": "^4.15.2",
     "http-server": "^0.9.0"
