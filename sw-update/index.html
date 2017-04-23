@@ -4,39 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SW Update</title>
+  <link href="https://cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="container">
   <h1>Service Worker Update</h1>
 
   <p>
-    The sw.js will be different in every request, with max-age set to 5s.
+    服务器收到 HTTP 请求后每次返回的 sw.js 版本都会增加，但该文件的 max-age 被设为 10s。
+    本页面的 Service Worker 被设置为收到更新时立即激活。
   </p>
   <p>
-    Current Version:  <span id="version">NaN</span>
+    当前 sw 版本:  <span id="version">NaN</span>
     <br>
-    Updatefound: <span id='updatefound'>No</span>
+    updatefound 事件: <span id='updatefound'>No</span>
   </p>
 
-  <dl>
-    <dt>Just Reload (Cmd+R)</dt>
-    <dd>The new service worker will be activated once updatefound.</dd>
+  <section>
+    <p>刷新 (Cmd+R)</p>
+    <p class="alert alert-info">10s 内刷新页面时 sw.js 会使用缓存，版本号不会增加。</p>
+  </section>
 
-    <dt><button id="update">Update</button> Manually</dt>
-    <dd>The regisration.update() pings the server for an updated version of this script without consulting caches. Chrome fails this API currently.</dd>
-  </dl>
+  <section>
+    <p>调用 <button class="btn btn-secondary btn-sm" id="update">Update</button></p>
+    <p class="alert alert-info">点击 Updage 按钮调用
+      <code>regisration.update()</code> 方法将会忽略缓存并更新 Service Worker。
+      但目前 Chrome 中存在 Bug，仍然会使用缓存。
+   </p>
+  </section>
 
-  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
   <script>
-
 (function(){
+    var version = document.getElementById('version');
     navigator.serviceWorker.register('./sw.js')
       .then(reg => {
         console.log('sw registered to', reg.scope)
         reg.addEventListener('updatefound', () => {
-          const newWorker = reg.installing;
-          $('#updatefound').text('Yes')
+          var newWorker = reg.installing;
+          document.getElementById('updatefound').innerHTML = 'Yes';
           newWorker.addEventListener('statechange', function(event){
-            $('#' + newWorker.state).text('Yes')
+            var el = document.getElementById(newWorker.state);
+            if (el) {
+              el.innerHTML = 'Yes';
+            }
             if(newWorker.state === 'activated') {
               fetchVersion()
             }
@@ -45,7 +54,7 @@
       })
       .catch(x => console.error('register failed', x.message))
 
-    $('#update').click(function(){
+    document.getElementById('update').addEventListener('click', function(){
       navigator.serviceWorker.getRegistration()
         .then(reg => reg.update())
         .catch(x => console.error('update failed', x))
@@ -54,13 +63,14 @@
     fetchVersion()
 
     function fetchVersion(){
-      $.get('/version')
-        .done(function(version){
-          $('#version').text(version)
-        })
-        .fail(function(){
-          $('#version').text('NaN')
-        })
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/version');
+      xhr.onreadystatechange = function(){
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          version.innerHTML = xhr.status === 200 ? xhr.responseText : 'NaN';
+        }
+      };
+      xhr.send();
     }
 })()
   </script>

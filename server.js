@@ -12,7 +12,7 @@ app.get('/sw-update/sw.js', function (req, res) {
     .replace('VERSION', count)
   res.writeHead(200, {
     'Content-Type': 'application/javascript',
-    'Cache-Control': 'max-age=5'
+    'Cache-Control': 'max-age=10'
   })
   count++
   console.log('sw-update/sw requested, version', count, 'served at', new Date())
